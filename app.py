@@ -18,3 +18,7 @@ def get_model():
         try:
             print("Loading MobileNetV2 from ImageNet...")
             model = tf.keras.applications.MobileNetV2(weights='imagenet')
+            except Exception as e:
+            print(f"Error loading model: {e}")
+            return None
+    return model
