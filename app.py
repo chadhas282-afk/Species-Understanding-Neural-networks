@@ -43,11 +43,11 @@ async def predict(file: UploadFile = File(...)):
         img_array = np.expand_dims(img_array, axis=0)
         
         img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
-               
+        
         prediction = img_model.predict(img_array)
         class_index = int(np.argmax(prediction[0]))
         confidence = float(prediction[0][class_index])
-
+        
         decoded = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0]
         real_object_name = decoded[1].replace('_', ' ').title()
         
@@ -73,3 +73,8 @@ async def predict(file: UploadFile = File(...)):
             "confidence": f"{confidence * 100:.2f}%"
         }
     except Exception as e:
+        return {"error": str(e)}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5001)
