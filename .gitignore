@@ -1,0 +1,19 @@
+# Virtual Environment
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Mac OS
+.DS_Store
+
+# Machine Learning Models
+*.keras
+*.h5
+*.pb
+
+# Logs
+*.log
