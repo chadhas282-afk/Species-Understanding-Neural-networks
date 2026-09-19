@@ -13,7 +13,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 model = None
 
 def get_model():
-     global model
+    global model
     if model is None:
         try:
             print("Loading MobileNetV2 from ImageNet...")
@@ -33,8 +33,13 @@ async def predict(file: UploadFile = File(...)):
     img_model = get_model()
     if not img_model:
         return {"error": "Model is still downloading/loading for the first time. Please wait a few seconds and try again!"}
-       
+    
     try:
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert('RGB')
         
+        image = image.resize((224, 224))
+        img_array = np.array(image)
+        img_array = np.expand_dims(img_array, axis=0)
+        
+        img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
