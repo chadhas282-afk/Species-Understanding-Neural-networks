@@ -33,3 +33,8 @@ async def predict(file: UploadFile = File(...)):
     img_model = get_model()
     if not img_model:
         return {"error": "Model is still downloading/loading for the first time. Please wait a few seconds and try again!"}
+       
+    try:
+        contents = await file.read()
+        image = Image.open(io.BytesIO(contents)).convert('RGB')
+        
