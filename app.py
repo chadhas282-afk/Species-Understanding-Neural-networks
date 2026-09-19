@@ -53,3 +53,8 @@ async def predict(file: UploadFile = File(...)):
         
         if 151 <= class_index <= 268:
             class_name = "Dog"
+            breed = real_object_name
+        elif 281 <= class_index <= 285:
+            class_name = "Cat"
+            breed = real_object_name
+        else:
