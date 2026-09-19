@@ -58,3 +58,8 @@ async def predict(file: UploadFile = File(...)):
             class_name = "Cat"
             breed = real_object_name
         else:
+            class_name = "Unrecognized"
+            
+        if class_name == "Unrecognized":
+            return {
+                "prediction": "Unrecognized",
