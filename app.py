@@ -18,7 +18,12 @@ def get_model():
         try:
             print("Loading MobileNetV2 from ImageNet...")
             model = tf.keras.applications.MobileNetV2(weights='imagenet')
-            except Exception as e:
+        except Exception as e:
             print(f"Error loading model: {e}")
             return None
     return model
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    with open("static/index.html") as f:
+        return f.read()
