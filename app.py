@@ -63,3 +63,8 @@ async def predict(file: UploadFile = File(...)):
         if class_name == "Unrecognized":
             return {
                 "prediction": "Unrecognized",
+                "confidence": f"{confidence * 100:.2f}%",
+                "message": f"This looks like a {real_object_name}, not a cat or dog!"
+            }
+            
+        return {
