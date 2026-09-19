@@ -47,4 +47,9 @@ async def predict(file: UploadFile = File(...)):
         prediction = img_model.predict(img_array)
         class_index = int(np.argmax(prediction[0]))
         confidence = float(prediction[0][class_index])
+
+        decoded = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0]
+        real_object_name = decoded[1].replace('_', ' ').title()
         
+        if 151 <= class_index <= 268:
+            class_name = "Dog"
