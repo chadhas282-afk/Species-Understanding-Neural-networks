@@ -7,3 +7,9 @@ from PIL import Image
 import io
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+model = None
+
+def get_model():
