@@ -13,3 +13,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 model = None
 
 def get_model():
+     global model
+    if model is None:
+        try:
+            print("Loading MobileNetV2 from ImageNet...")
+            model = tf.keras.applications.MobileNetV2(weights='imagenet')
