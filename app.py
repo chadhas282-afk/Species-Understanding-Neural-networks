@@ -27,3 +27,9 @@ def get_model():
 async def read_root():
     with open("static/index.html") as f:
         return f.read()
+
+@app.post("/predict")
+async def predict(file: UploadFile = File(...)):
+    img_model = get_model()
+    if not img_model:
+        return {"error": "Model is still downloading/loading for the first time. Please wait a few seconds and try again!"}
