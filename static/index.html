@@ -313,3 +313,8 @@ input[type="file"] {
     </main>
 
     <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-upload');
+    const uploadContent = document.getElementById('upload-content');
+    const previewContainer = document.getElementById('preview-container');
