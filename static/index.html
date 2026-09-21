@@ -327,3 +327,9 @@ input[type="file"] {
     const className = document.getElementById('class-name');
     const confidenceFill = document.getElementById('confidence-fill');
     const confidenceVal = document.getElementById('confidence-val');
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
