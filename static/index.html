@@ -333,3 +333,8 @@ input[type="file"] {
     });
 
     function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
