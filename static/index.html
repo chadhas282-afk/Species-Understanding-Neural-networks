@@ -347,3 +347,9 @@ input[type="file"] {
 
     dropZone.addEventListener('drop', handleDrop, false);
     fileInput.addEventListener('change', handleFiles, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles({ target: { files } });
+    }
