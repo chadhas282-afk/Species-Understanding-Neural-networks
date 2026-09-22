@@ -1,288 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pet Vision | AI Classifier</title>
-    <meta name="description"
-        content="A state-of-the-art AI classifier that detects whether an image contains a cat or a dog.">
+    <meta name="description" content="A state-of-the-art AI classifier that detects whether an image contains a cat or a dog.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #0b0f19;
-            --panel-bg: rgba(255, 255, 255, 0.03);
-            --panel-border: rgba(255, 255, 255, 0.08);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-1: #38bdf8;
-            --accent-2: #818cf8;
-            --danger: #fb7185;
-            --success: #34d399;
-        }
+:root {
+    --bg-color: #0b0f19;
+    --panel-bg: rgba(255, 255, 255, 0.03);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent-1: #38bdf8;
+    --accent-2: #818cf8;
+    --danger: #fb7185;
+    --success: #34d399;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            background-image:
-                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.08) 0%, transparent 50%);
-        }
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.08) 0%, transparent 50%);
+}
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+.container {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
 
-        header {
-            text-align: center;
-        }
+header {
+    text-align: center;
+}
 
-        .gradient-text {
-            font-size: 3rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.gradient-text {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
 
-        .glass-panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 24px;
-            padding: 2.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+.glass-panel {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
 
-        .upload-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
-            border: 2px dashed var(--panel-border);
-            border-radius: 24px;
-            transition: all 0.3s ease;
-        }
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    border: 2px dashed var(--panel-border);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+}
 
-        .upload-section.dragover {
-            border-color: var(--accent-1);
-            background: rgba(56, 189, 248, 0.05);
-        }
+.upload-section.dragover {
+    border-color: var(--accent-1);
+    background: rgba(56, 189, 248, 0.05);
+}
 
-        .upload-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
 
-        input[type="file"] {
-            display: none;
-        }
+input[type="file"] {
+    display: none;
+}
 
-        .custom-file-upload {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            border: 1px solid var(--panel-border);
-            padding: 0.75rem 2.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+.custom-file-upload {
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    border: 1px solid var(--panel-border);
+    padding: 0.75rem 2.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
-        .custom-file-upload:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
-        }
+.custom-file-upload:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1));
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.15);
+}
 
-        .preview-container {
-            width: 100%;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-        }
+.preview-container {
+    width: 100%;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-        #image-preview {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
+#image-preview {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
 
-        .reset-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: rgba(0, 0, 0, 0.6);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-            transition: all 0.2s ease;
-        }
+.reset-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
 
-        .reset-btn:hover {
-            background: var(--danger);
-            transform: scale(1.1);
-        }
+.reset-btn:hover {
+    background: var(--danger);
+    transform: scale(1.1);
+}
 
-        .hidden {
-            display: none !important;
-        }
+.hidden {
+    display: none !important;
+}
 
-        .result-section {
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+.result-section {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 24px;
+    padding: 2rem;
+    text-align: center;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
 
-        .loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(56, 189, 248, 0.2);
+    border-radius: 50%;
+    border-top-color: var(--accent-1);
+    animation: spin 1s linear infinite;
+}
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(56, 189, 248, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--accent-1);
-            animation: spin 1s linear infinite;
-        }
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
 
-        @keyframes spin {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+.prediction h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--success), #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        .prediction h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--success), #10b981);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.confidence-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
 
-        .confidence-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
+.confidence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+    width: 0%;
+    transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 4px;
+}
 
-        .confidence-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-            width: 0%;
-            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-            border-radius: 4px;
-        }
+.confidence-text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
 
-        .confidence-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
+.logo-container {
+    display: inline-grid;
+    place-items: center;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
 
-        .logo-container {
-            display: inline-grid;
-            place-items: center;
-            cursor: pointer;
-            margin-bottom: 0.5rem;
-        }
+.logo-short, .logo-full {
+    grid-area: 1 / 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
-        .logo-short,
-        .logo-full {
-            grid-area: 1 / 1;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
+.logo-full {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    font-size: 2rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
 
-        .logo-full {
-            opacity: 0;
-            transform: translateY(10px);
-            pointer-events: none;
-            font-size: 2rem;
-            font-weight: 800;
-            white-space: nowrap;
-        }
+.logo-short {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-        .logo-short {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.logo-container:hover .logo-short {
+    opacity: 0;
+    transform: translateY(-10px);
+}
 
-        .logo-container:hover .logo-short {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        .logo-container:hover .logo-full {
-            opacity: 1;
-            transform: translateY(0);
-        }
+.logo-container:hover .logo-full {
+    opacity: 1;
+    transform: translateY(0);
+}
     </style>
 </head>
-
 <body>
     <main class="container">
         <header>
@@ -292,7 +279,7 @@
             </h1>
             <p class="subtitle">State-of-the-art Cat vs Dog Classifier</p>
         </header>
-
+        
         <div class="glass-panel upload-section" id="drop-zone">
             <div class="upload-content" id="upload-content">
                 <label for="file-upload" class="custom-file-upload">
@@ -300,15 +287,11 @@
                 </label>
                 <input id="file-upload" type="file" accept="image/*" />
             </div>
-
+            
             <div class="preview-container hidden" id="preview-container">
                 <img id="image-preview" src="" alt="Preview">
                 <button class="reset-btn" id="reset-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
         </div>
@@ -318,7 +301,7 @@
                 <div class="spinner"></div>
                 <p>Analyzing image...</p>
             </div>
-
+            
             <div class="prediction hidden" id="prediction-result">
                 <h2 id="class-name">Dog</h2>
                 <div class="confidence-bar">
@@ -330,107 +313,107 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dropZone = document.getElementById('drop-zone');
-            const fileInput = document.getElementById('file-upload');
-            const uploadContent = document.getElementById('upload-content');
-            const previewContainer = document.getElementById('preview-container');
-            const imagePreview = document.getElementById('image-preview');
-            const resetBtn = document.getElementById('reset-btn');
+document.addEventListener('DOMContentLoaded', () => {
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-upload');
+    const uploadContent = document.getElementById('upload-content');
+    const previewContainer = document.getElementById('preview-container');
+    const imagePreview = document.getElementById('image-preview');
+    const resetBtn = document.getElementById('reset-btn');
+    
+    const resultSection = document.getElementById('result-section');
+    const loading = document.getElementById('loading');
+    const predictionResult = document.getElementById('prediction-result');
+    const className = document.getElementById('class-name');
+    const confidenceFill = document.getElementById('confidence-fill');
+    const confidenceVal = document.getElementById('confidence-val');
 
-            const resultSection = document.getElementById('result-section');
-            const loading = document.getElementById('loading');
-            const predictionResult = document.getElementById('prediction-result');
-            const className = document.getElementById('class-name');
-            const confidenceFill = document.getElementById('confidence-fill');
-            const confidenceVal = document.getElementById('confidence-val');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
 
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+    });
+
+    dropZone.addEventListener('drop', handleDrop, false);
+    fileInput.addEventListener('change', handleFiles, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles({ target: { files } });
+    }
+
+    function handleFiles(e) {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+
+        resultSection.classList.remove('hidden');
+        loading.classList.remove('hidden');
+        predictionResult.classList.add('hidden');
+        dropZone.style.border = 'none';
+        
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            imagePreview.src = reader.result;
+            uploadContent.classList.add('hidden');
+            previewContainer.classList.remove('hidden');
+            
+            predictImage(file);
+        }
+    }
+
+    resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        fileInput.value = '';
+        imagePreview.src = '';
+        previewContainer.classList.add('hidden');
+        uploadContent.classList.remove('hidden');
+        resultSection.classList.add('hidden');
+        dropZone.style.border = '';
+    });
+
+    async function predictImage(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
             });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            
+            const data = await response.json();
+            
+            loading.classList.add('hidden');
+            
+            if (data.error) {
+                alert("Error: " + data.error);
+                return;
             }
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
-            });
-
-            dropZone.addEventListener('drop', handleDrop, false);
-            fileInput.addEventListener('change', handleFiles, false);
-
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                handleFiles({ target: { files } });
-            }
-
-            function handleFiles(e) {
-                const file = e.target.files[0];
-                if (!file || !file.type.startsWith('image/')) return;
-
-                resultSection.classList.remove('hidden');
-                loading.classList.remove('hidden');
-                predictionResult.classList.add('hidden');
-                dropZone.style.border = 'none';
-
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    imagePreview.src = reader.result;
-                    uploadContent.classList.add('hidden');
-                    previewContainer.classList.remove('hidden');
-
-                    predictImage(file);
-                }
-            }
-
-            resetBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                fileInput.value = '';
-                imagePreview.src = '';
-                previewContainer.classList.add('hidden');
-                uploadContent.classList.remove('hidden');
-                resultSection.classList.add('hidden');
-                dropZone.style.border = '';
-            });
-
-            async function predictImage(file) {
-                const formData = new FormData();
-                formData.append('file', file);
-
-                try {
-                    const response = await fetch('/predict', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await response.json();
-
-                    loading.classList.add('hidden');
-
-                    if (data.error) {
-                        alert("Error: " + data.error);
-                        return;
-                    }
-
-                    predictionResult.classList.remove('hidden');
-                    className.innerText = data.breed ? data.breed : data.prediction;
-
-                    if (data.prediction === 'Unrecognized') {
-                        className.style.background = 'linear-gradient(135deg, #cbd5e1, #94a3b8)';
-                        confidenceVal.innerText = data.confidence + " - " + data.message;
+            
+            predictionResult.classList.remove('hidden');
+            className.innerText = data.breed ? data.breed : data.prediction;
+            
+            if (data.prediction === 'Unrecognized') {
+                className.style.background = 'linear-gradient(135deg, #cbd5e1, #94a3b8)';
+                confidenceVal.innerText = data.confidence + " - " + data.message;
             } else if (data.prediction === 'Cat') {
                 className.style.background = 'linear-gradient(135deg, #fb7185, #f43f5e)';
                 confidenceVal.innerText = data.confidence + " Match";
             } else {
-            className.style.background = 'linear-gradient(135deg, #34d399, #10b981)';
+                className.style.background = 'linear-gradient(135deg, #34d399, #10b981)';
                 confidenceVal.innerText = data.confidence + " Match";
             }
             
@@ -445,3 +428,9 @@
             loading.classList.add('hidden');
             alert('An error occurred during prediction.');
             console.error(error);
+        }
+    }
+});
+    </script>
+</body>
+</html>
