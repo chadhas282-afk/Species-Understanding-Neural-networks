@@ -440,3 +440,8 @@
             setTimeout(() => {
                 confidenceFill.style.width = data.confidence;
             }, 100);
+
+        } catch (error) {
+            loading.classList.add('hidden');
+            alert('An error occurred during prediction.');
+            console.error(error);
