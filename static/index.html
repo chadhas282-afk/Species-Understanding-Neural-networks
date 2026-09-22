@@ -363,3 +363,8 @@ input[type="file"] {
         predictionResult.classList.add('hidden');
         dropZone.style.border = 'none';
         
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            imagePreview.src = reader.result;
+            uploadContent.classList.add('hidden');
