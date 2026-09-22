@@ -403,3 +403,8 @@ input[type="file"] {
                 return;
             }
             
+             predictionResult.classList.remove('hidden');
+            className.innerText = data.breed ? data.breed : data.prediction;
+            
+            if (data.prediction === 'Unrecognized') {
+                className.style.background = 'linear-gradient(135deg, #cbd5e1, #94a3b8)';
