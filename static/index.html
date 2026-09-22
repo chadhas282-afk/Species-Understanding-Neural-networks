@@ -357,3 +357,9 @@ input[type="file"] {
     function handleFiles(e) {
         const file = e.target.files[0];
         if (!file || !file.type.startsWith('image/')) return;
+
+ resultSection.classList.remove('hidden');
+        loading.classList.remove('hidden');
+        predictionResult.classList.add('hidden');
+        dropZone.style.border = 'none';
+        
