@@ -373,3 +373,8 @@ input[type="file"] {
             predictImage(file);
         }
     }
+
+    resetBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        fileInput.value = '';
+        imagePreview.src = '';
