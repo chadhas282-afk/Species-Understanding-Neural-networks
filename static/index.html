@@ -398,3 +398,8 @@ input[type="file"] {
             
             loading.classList.add('hidden');
             
+            if (data.error) {
+                alert("Error: " + data.error);
+                return;
+            }
+            
