@@ -368,3 +368,8 @@ input[type="file"] {
         reader.onload = () => {
             imagePreview.src = reader.result;
             uploadContent.classList.add('hidden');
+             previewContainer.classList.remove('hidden');
+            
+            predictImage(file);
+        }
+    }
