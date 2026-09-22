@@ -435,3 +435,8 @@
             }
             
             className.style.webkitBackgroundClip = 'text';
+            className.style.webkitTextFillColor = 'transparent';
+            
+            setTimeout(() => {
+                confidenceFill.style.width = data.confidence;
+            }, 100);
